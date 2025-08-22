@@ -1,3 +1,4 @@
+import sys
 from state import State
 from search import bfs, dfs, iddfs, greedy, astar
 from utils.parser import parse_board_from_file
@@ -32,7 +33,13 @@ def solve(file_path, algorithm):
 """
 
 if __name__ == "__main__":
-    result = solve('boards/b1.txt', "bfs")
+    if len(sys.argv) < 3:
+        print("\033[91mUsage: python main.py <board_file_path> <algorithm>\033[0m")
+        sys.exit(1)
+
+    board_file_path = sys.argv[1]    # first argument: file path
+    algorithm = sys.argv[2]     # second argument: bfs, dfs, etc.
+    result = solve(board_file_path, algorithm)
 
     print("=== Sokoban Solver Result ===")
     print(f"Result: {result['result']}")
