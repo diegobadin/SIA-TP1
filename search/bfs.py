@@ -5,7 +5,7 @@ def solve_with_bfs(initial_state, walls, goal_positions):
     start_time = time.time()
 
     frontier = deque([initial_state])  # BFS uses a queue
-    came_from = {initial_state: None}  # Store parent state only
+    came_from = {initial_state: (None, None)}  # Store parent state only
     visited = set()
     expanded_nodes_qty = 0
 
@@ -22,8 +22,8 @@ def solve_with_bfs(initial_state, walls, goal_positions):
             # Reconstruct solution path
             moves = []
             state = current_state
-            while came_from[state] is not None:
-                parent = came_from[state]
+            while came_from[state][0] is not None:
+                parent, action = came_from[state]
                 # Compare player positions to infer the move
                 dr = state.player[0] - parent.player[0]
                 dc = state.player[1] - parent.player[1]
@@ -48,9 +48,9 @@ def solve_with_bfs(initial_state, walls, goal_positions):
                 "duration": end_time - start_time
             }
 
-        for neighbor in current_state.get_possible_moves(walls):
+        for action, neighbor in current_state.get_possible_moves(walls):
             if neighbor not in came_from:  # not discovered before
-                came_from[neighbor] = current_state
+                came_from[neighbor] = (current_state, action)
                 frontier.append(neighbor)
 
     end_time = time.time()

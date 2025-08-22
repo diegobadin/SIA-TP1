@@ -21,9 +21,14 @@ class State:
     def get_possible_moves(self, walls):
         moves = []
         # Grid directions: up/down = row change, left/right = column change
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
+        directions = {
+            "U": (-1, 0),
+            "D": (1, 0),
+            "L": (0, -1),
+            "R": (0, 1)
+        }
 
-        for di, dj in directions:
+        for action, (di, dj) in directions.items():
             new_player = (self.player[0] + di, self.player[1] + dj)
 
             if new_player in walls:
@@ -35,8 +40,8 @@ class State:
                 if new_box_pos in walls or new_box_pos in self.boxes:
                     continue
                 new_boxes = frozenset(self.boxes - {new_player} | {new_box_pos})
-                moves.append(State(new_player, new_boxes))
+                moves.append((action, State(new_player, new_boxes)))
             else:
-                moves.append(State(new_player, self.boxes))
+                moves.append((action, State(new_player, self.boxes)))
 
         return moves
