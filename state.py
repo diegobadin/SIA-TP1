@@ -1,5 +1,3 @@
-from typing import Tuple, Set, List
-
 class State:
     def __init__(self, player, boxes):
         self.player = player
