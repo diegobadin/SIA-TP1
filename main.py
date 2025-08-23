@@ -4,7 +4,7 @@ from search import bfs, dfs, iddfs, greedy, astar
 from utils.parser import parse_board_from_file
 
 
-def solve(file_path, algorithm):
+def solve(file_path, algorithm, heuristic=None):
     walls, goal_positions, player_pos, box_positions = parse_board_from_file(file_path)
     initial_state = State(player_pos, box_positions)
 
@@ -15,7 +15,7 @@ def solve(file_path, algorithm):
     elif algorithm == 'iddfs':
         return iddfs.solve_with_iddfs(initial_state, walls, goal_positions)
     elif algorithm == 'greedy':
-        return greedy.solve_with_greedy(initial_state, walls, goal_positions)
+        return greedy.solve_with_greedy(initial_state, walls, goal_positions, heuristic)
     elif algorithm == 'astar':
         return astar.solve_with_astar(initial_state, walls, goal_positions)
     else:
