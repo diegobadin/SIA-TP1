@@ -1,9 +1,5 @@
-from adodbapi.ado_consts import directions
-
-
 class State:
     # Grid directions: up/down = row change, left/right = column change
-
 
     def __init__(self, player, boxes, goal_position, walls):
         self.player = player
