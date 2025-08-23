@@ -2,11 +2,11 @@ import heapq
 import time
 
 
-def solve_with_greedy(initial_state, board, goal_positions, heuristic):
+def solve_with_greedy(initial_state, heuristic):
     start_time = time.time()
 
     frontier = []
-    heapq.heappush(frontier, (heuristic(initial_state, goal_positions), initial_state))
+    heapq.heappush(frontier, (heuristic(initial_state), initial_state))
     came_from = {initial_state: (None, None)}
     visited = set()
     expanded_nodes_qty = 0

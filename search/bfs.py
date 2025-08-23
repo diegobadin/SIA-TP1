@@ -1,7 +1,7 @@
 import time
 from collections import deque
 
-def solve_with_bfs(initial_state, walls, goal_positions):
+def solve_with_bfs(initial_state):
     start_time = time.time()
 
     frontier = deque([initial_state])  # BFS uses a queue
@@ -18,7 +18,7 @@ def solve_with_bfs(initial_state, walls, goal_positions):
 
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state(goal_positions):
+        if current_state.is_goal_state():
             # Reconstruct solution path
             moves = []
             state = current_state
@@ -48,7 +48,7 @@ def solve_with_bfs(initial_state, walls, goal_positions):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves(walls):
+        for action, neighbor in current_state.get_possible_moves():
             if neighbor not in came_from:  # not discovered before
                 came_from[neighbor] = (current_state, action)
                 frontier.append(neighbor)

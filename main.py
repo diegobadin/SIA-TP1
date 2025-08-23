@@ -6,18 +6,18 @@ from utils.parser import parse_board_from_file
 
 def solve(file_path, algorithm, heuristic=None):
     walls, goal_positions, player_pos, box_positions = parse_board_from_file(file_path)
-    initial_state = State(player_pos, box_positions)
+    initial_state = State(player_pos, box_positions, goal_positions, walls)
 
     if algorithm == 'bfs':
-        return bfs.solve_with_bfs(initial_state, walls, goal_positions)
+        return bfs.solve_with_bfs(initial_state)
     elif algorithm == 'dfs':
-        return dfs.solve_with_dfs(initial_state, walls, goal_positions)
+        return dfs.solve_with_dfs(initial_state)
     elif algorithm == 'iddfs':
-        return iddfs.solve_with_iddfs(initial_state, walls, goal_positions)
+        return iddfs.solve_with_iddfs(initial_state)
     elif algorithm == 'greedy':
-        return greedy.solve_with_greedy(initial_state, walls, goal_positions, heuristic)
+        return greedy.solve_with_greedy(initial_state, heuristic)
     elif algorithm == 'astar':
-        return astar.solve_with_astar(initial_state, walls, goal_positions)
+        return astar.solve_with_astar(initial_state, heuristic)
     else:
         raise ValueError(f"Unknown algorithm: {algorithm}")
 
