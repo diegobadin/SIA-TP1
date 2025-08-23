@@ -1,6 +1,6 @@
 import time
 
-def solve_with_iddfs(initial_state, max_depth=100):
+def solve_with_iddfs(initial_state, max_depth=3):
     start_time = time.time()
     expanded_nodes_qty = 0
     frontier_nodes_qty = 0
@@ -12,11 +12,11 @@ def solve_with_iddfs(initial_state, max_depth=100):
             return None
         visited.add(state)
         expanded_nodes_qty += 1
-        if state.is_goal_state(state.goal_positions):
+        if state.is_goal_state():
             return state
         if depth == 0:
             return None
-        for action, neighbor in state.get_possible_moves(state.walls):
+        for action, neighbor in state.get_possible_moves():
             if neighbor not in came_from:
                 came_from[neighbor] = (state, action)
                 result = dls(neighbor, depth - 1, came_from, visited)
