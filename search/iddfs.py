@@ -1,9 +1,8 @@
 import time
 
-def solve_with_iddfs(initial_state, max_depth=3):
+def solve_with_iddfs(initial_state, depth_step=1):
     start_time = time.time()
     expanded_nodes_qty = 0
-    frontier_nodes_qty = 0
 
     # AUX: Depth-Limited Search (DLS)
     def dls(state, depth, came_from, visited):
@@ -24,17 +23,28 @@ def solve_with_iddfs(initial_state, max_depth=3):
                     return result
         return None
 
-    for depth_limit in range(1, max_depth + 1):
+    depth_limit = depth_step
+    while True:
         came_from = {initial_state: (None, None)}
         visited = set()
         result_state = dls(initial_state, depth_limit, came_from, visited)
         frontier_nodes_qty = len([s for s in came_from if s not in visited])
         if result_state is not None:
+            # Reconstruir el camino de solución igual que en BFS
             moves = []
             state = result_state
             while came_from[state][0] is not None:
-                parent, action = came_from[state]
-                moves.append(action)
+                parent, _ = came_from[state]
+                dr = state.player[0] - parent.player[0]
+                dc = state.player[1] - parent.player[1]
+                if dr == -1 and dc == 0:
+                    moves.append("U")
+                elif dr == 1 and dc == 0:
+                    moves.append("D")
+                elif dr == 0 and dc == -1:
+                    moves.append("L")
+                elif dr == 0 and dc == 1:
+                    moves.append("R")
                 state = parent
             moves.reverse()
             end_time = time.time()
@@ -46,12 +56,4 @@ def solve_with_iddfs(initial_state, max_depth=3):
                 "solution": "".join(moves),
                 "duration": end_time - start_time
             }
-    end_time = time.time()
-    return {
-        "result": "no solution",
-        "cost": None,
-        "expanded_nodes_qty": expanded_nodes_qty,
-        "frontier_nodes_qty": frontier_nodes_qty,
-        "solution": "",
-        "duration": end_time - start_time
-    }
+        depth_limit += depth_step
