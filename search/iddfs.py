@@ -1,6 +1,6 @@
 import time
 
-def solve_with_iddfs(initial_state, depth_step=1):
+def solve_with_iddfs(initial_state, depth_step=10000):
     start_time = time.time()
     expanded_nodes_qty = 0
 
