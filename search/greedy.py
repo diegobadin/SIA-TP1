@@ -1,25 +1,26 @@
 import heapq
+import itertools
 import time
 
-
-def solve_with_greedy(initial_state, heuristic):
+def solve_with_greedy(initial_state, heuristic, goal_positions, board):
     start_time = time.time()
+    counter = itertools.count()  # contador global para romper empates
 
     frontier = []
-    heapq.heappush(frontier, (heuristic(initial_state), initial_state))
+    heapq.heappush(frontier, (heuristic(initial_state, goal_positions), next(counter), initial_state))
     came_from = {initial_state: (None, None)}
     visited = set()
     expanded_nodes_qty = 0
 
     while frontier:
-        _, current_state = heapq.heappop(frontier)
+        h_val, _, current_state = heapq.heappop(frontier)
 
         if current_state in visited:
             continue
         visited.add(current_state)
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state(goal_positions):
+        if current_state.is_goal_state():
             # Reconstruct solution path
             moves = []
             state = current_state
@@ -49,11 +50,11 @@ def solve_with_greedy(initial_state, heuristic):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves(board):
+        for action, neighbor in current_state.get_possible_moves():
             if neighbor not in came_from:
                 came_from[neighbor] = (current_state, action)
                 h = heuristic(neighbor, goal_positions)
-                heapq.heappush(frontier, (h, neighbor))
+                heapq.heappush(frontier, (h, next(counter), neighbor))
 
     end_time = time.time()
     return {
@@ -64,5 +65,4 @@ def solve_with_greedy(initial_state, heuristic):
         "solution": "",
         "duration": end_time - start_time
     }
-
 

@@ -1,10 +1,11 @@
 import sys
 from state import State
 from search import bfs, dfs, iddfs, greedy, astar
+from utils import heuristics
 from utils.parser import parse_board_from_file
 
 
-def solve(file_path, algorithm, heuristic=None):
+def solve(file_path, algorithm, heuristic=heuristics.manhattan_distance):
     walls, goal_positions, player_pos, box_positions = parse_board_from_file(file_path)
     initial_state = State(player_pos, box_positions, goal_positions, walls)
 
@@ -15,7 +16,7 @@ def solve(file_path, algorithm, heuristic=None):
     elif algorithm == 'iddfs':
         return iddfs.solve_with_iddfs(initial_state)
     elif algorithm == 'greedy':
-        return greedy.solve_with_greedy(initial_state, heuristic)
+        return greedy.solve_with_greedy(initial_state, heuristic, goal_positions, walls)
     elif algorithm == 'astar':
         return astar.solve_with_astar(initial_state, heuristic)
     else:
@@ -46,6 +47,6 @@ if __name__ == "__main__":
     print(f"Cost: {result['cost']}")
     print(f"Expanded Nodes: {result['expanded_nodes_qty']}")
     print(f"Max Frontier Size: {result['frontier_nodes_qty']}")
-    #print(f"Solution: {' -> '.join(result['solution']) if result['solution'] else 'No solution'}")
+    print(f"Solution: {result['solution'] if result['solution'] else 'No solution'}")
     print(f"Duration: {result['duration']:.4f} seconds")
     print("==============================")
