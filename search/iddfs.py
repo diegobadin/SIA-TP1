@@ -30,7 +30,6 @@ def solve_with_iddfs(initial_state, depth_step=10000):
         result_state = dls(initial_state, depth_limit, came_from, visited)
         frontier_nodes_qty = len([s for s in came_from if s not in visited])
         if result_state is not None:
-            # Reconstruir el camino de solución igual que en BFS
             moves = []
             state = result_state
             while came_from[state][0] is not None:
