@@ -7,18 +7,18 @@ from utils.parser import parse_board_from_file
 
 def solve(file_path, algorithm, heuristic=heuristics.manhattan_distance):
     walls, goal_positions, player_pos, box_positions = parse_board_from_file(file_path)
-    initial_state = State(player_pos, box_positions, goal_positions, walls)
+    initial_state = State(player_pos, box_positions)
 
     if algorithm == 'bfs':
-        return bfs.solve_with_bfs(initial_state)
+        return bfs.solve_with_bfs(initial_state,walls,goal_positions)
     elif algorithm == 'dfs':
-        return dfs.solve_with_dfs(initial_state)
+        return dfs.solve_with_dfs(initial_state,walls,goal_positions)
     elif algorithm == 'iddfs':
-        return iddfs.solve_with_iddfs(initial_state)
+        return iddfs.solve_with_iddfs(initial_state,walls,goal_positions,1)
     elif algorithm == 'greedy':
-        return greedy.solve_with_greedy(initial_state, heuristic, goal_positions, walls)
+        return greedy.solve_with_greedy(initial_state, walls,goal_positions, heuristic)
     elif algorithm == 'astar':
-        return astar.solve_with_astar(initial_state, heuristic)
+        return astar.solve_with_astar(initial_state,walls,goal_positions, heuristic)
     else:
         raise ValueError(f"Unknown algorithm: {algorithm}")
 
