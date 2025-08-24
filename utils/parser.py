@@ -26,5 +26,8 @@ def parse_board_from_file(file_path):
                     player_pos = pos
                 if cell == '$':
                     box_positions.add(pos)
+                if cell == '*':
+                    box_positions.add(pos)
+                    goal_positions.add(pos)
 
     return walls, goal_positions, player_pos, box_positions

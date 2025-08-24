@@ -1,7 +1,8 @@
 import time
 from collections import deque
+from utils.draw import  draw_sokoban
 
-def solve_with_bfs(initial_state):
+def solve_with_bfs(initial_state,walls,goal_positions):
     start_time = time.time()
 
     frontier = deque([initial_state])  # BFS uses a queue
@@ -11,14 +12,17 @@ def solve_with_bfs(initial_state):
 
     while frontier:
         current_state = frontier.popleft()
-
+        # draw_sokoban(walls, current_state.boxes, goal_positions, current_state.player)
         if current_state in visited:
             continue
         visited.add(current_state)
 
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state():
+        if len(visited)% 100000 == 0:
+            print(f"Expanded nodes: {len(visited)} and frontier size: {len(frontier)}")
+
+        if current_state.is_goal_state(goal_positions):
             # Reconstruct solution path
             moves = []
             state = current_state
@@ -48,7 +52,7 @@ def solve_with_bfs(initial_state):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves():
+        for action, neighbor in current_state.get_possible_moves(walls,goal_positions):
             if neighbor not in came_from:  # not discovered before
                 came_from[neighbor] = (current_state, action)
                 frontier.append(neighbor)
