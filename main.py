@@ -14,7 +14,7 @@ def solve(file_path, algorithm, heuristic=heuristics.manhattan_distance):
     elif algorithm == 'dfs':
         return dfs.solve_with_dfs(initial_state,walls,goal_positions)
     elif algorithm == 'iddfs':
-        return iddfs.solve_with_iddfs(initial_state,walls,goal_positions,1)
+        return iddfs.solve_with_iddfs(initial_state,walls,goal_positions)
     elif algorithm == 'greedy':
         return greedy.solve_with_greedy(initial_state, walls,goal_positions, heuristic)
     elif algorithm == 'astar':
