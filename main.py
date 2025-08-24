@@ -16,9 +16,9 @@ def solve(file_path, algorithm, heuristic=heuristics.manhattan_distance):
     elif algorithm == 'iddfs':
         return iddfs.solve_with_iddfs(initial_state,walls,goal_positions)
     elif algorithm == 'greedy':
-        return greedy.solve_with_greedy(initial_state, heuristic, walls, goal_positions)
+        return greedy.solve_with_greedy(initial_state, heuristic, goal_positions, walls)
     elif algorithm == 'astar':
-        return astar.solve_with_astar(initial_state, heuristic,walls,  goal_positions)
+        return astar.solve_with_astar(initial_state, heuristic,  goal_positions, walls)
     else:
         raise ValueError(f"Unknown algorithm: {algorithm}")
 
