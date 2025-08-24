@@ -77,3 +77,34 @@ def euclidean_distance(initial_state, goal_positions):
 def manhattan_linear_conflicts_distance(initial_state, goal_positions):
     # TODO: implement Greedy search with heuristic
     pass
+
+def manhattan_plus_player_distance(initial_state, goal_positions):
+    """
+       Computes a non-admissible heuristic for a Sokoban state.
+
+       The heuristic estimates how close the state is to the goal by summing:
+       1. For each box, the Manhattan distance to the nearest unassigned goal position.
+       2. The Manhattan distance from the player to each box.
+
+       Parameters:
+       - initial_state: a State object representing the current Sokoban board,
+         including the positions of the player and all boxes.
+       - goal_positions: a set of tuples (row, col) indicating the target positions
+         for the boxes.
+
+       Returns:
+       - total_distance: int, the sum of minimum Manhattan distances for all boxes
+      to the closest remaining goal plus the sum of distances from the player to all boxes.
+
+       Notes:
+       - Each goal position is assigned to only one box (to avoid double-counting).
+       - Since it includes the player's distance to each box, it may overestimate the true cost,
+         and therefore is non-admissible.
+       """
+    # Use the already implemented Manhattan distance for boxes to goals
+    total_distance = manhattan_distance(initial_state, goal_positions)
+
+    # Distance from player to all boxes
+    total_distance += sum(abs(initial_state.player[0] - box[0]) + abs(initial_state.player[1] - box[1]) for box in initial_state.boxes)
+
+    return total_distance

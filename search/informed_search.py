@@ -2,7 +2,7 @@ import heapq
 import itertools
 import time
 
-def solve_informed_search(initial_state, priority_function, goal_positions):
+def solve_informed_search(initial_state, priority_function, goal_positions, board):
     start_time = time.time()
     counter = itertools.count()  # contador global para romper empates
 
@@ -20,7 +20,7 @@ def solve_informed_search(initial_state, priority_function, goal_positions):
         visited.add(current_state)
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state():
+        if current_state.is_goal_state(goal_positions):
             # Reconstruct solution path
             moves = []
             state = current_state
@@ -50,7 +50,7 @@ def solve_informed_search(initial_state, priority_function, goal_positions):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves():
+        for action, neighbor in current_state.get_possible_moves(board, goal_positions):
             if neighbor not in came_from:
                 came_from[neighbor] = (current_state, action)
                 g_neighbor = g_val + 1  # costo acumulado

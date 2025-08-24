@@ -38,7 +38,8 @@ def get_heuristic_function(name: str):
     heuristics_map = {
         "manhattan": heuristics.manhattan_distance,
         "euclidean": heuristics.euclidean_distance,
-        "linear_conflict": heuristics.manhattan_linear_conflicts_distance
+        "linear_conflict": heuristics.manhattan_linear_conflicts_distance,
+        "manhattan_player":heuristics.manhattan_linear_conflicts_distance
     }
 
     if name not in heuristics_map:
@@ -52,9 +53,9 @@ if __name__ == "__main__":
         sys.exit(1)
 
     board_file_path = sys.argv[1]    # first argument: file path
-    algorithm = sys.argv[2]     # second argument: bfs, dfs, etc.
+    algorithm = sys.argv[2]          # second argument: bfs, dfs, etc.
     if len(sys.argv) > 3:
-        heuristic = sys.argv[3]  # third argument: manhattan, euclidean, linear_conflict
+        heuristic = sys.argv[3]      # third argument: manhattan, euclidean, linear_conflict, manhattan_player
     else:
         heuristic = "manhattan"
 
