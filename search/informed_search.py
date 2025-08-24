@@ -2,7 +2,7 @@ import heapq
 import itertools
 import time
 
-def solve_informed_search(initial_state, priority_function, goal_positions, walls):
+def solve_informed_search(initial_state, priority_function, walls, goal_positions):
     start_time = time.time()
     counter = itertools.count()  # contador global para romper empates
 
