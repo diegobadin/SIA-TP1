@@ -6,5 +6,4 @@ def greedy_priority(state, heuristic, g_val):
 
 
 def solve_with_greedy(initial_state, heuristic, goal_positions, board):
-    priority_function = lambda state, goals, g_val: heuristic(state, goals)
-    return informed_search.solve_informed_search(initial_state, priority_function, goal_positions)
+    return informed_search.solve_informed_search(initial_state, greedy_priority, goal_positions)
