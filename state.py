@@ -4,6 +4,7 @@ directions = {
     "L": (0, -1),
     "R": (0, 1)
 }
+
 l_checks = {
     "U": [((0, 1), (-1, 1)),  # misma fila - columna derecha + fila arriba- columna derecha
           ((0, -1), (-1, -1))],  # fila arriba - misma columna  + fila  arriba- columna izquierda
@@ -40,7 +41,7 @@ class State:
         return self.boxes == goal_positions
 
 
-    def is_deadlock(self, new_boxes,new_box_pos, walls,goal_positions):
+    def is_deadlock(self, new_boxes,new_box_pos, walls, goal_positions):
         row, col = new_box_pos
         # draw_sokoban(walls, self.boxes, goal_positions, self.player)
 
@@ -68,7 +69,25 @@ class State:
                     if (r1, c1) in walls and (r2, c2) in walls:
                         return True
 
+        for key, (di, dj) in directions.items():
+            neighbor = (row + di, col + dj)
+
+            if neighbor in walls:
+                if key in ["U", "D"]:
+                    wall_row = [(row + di, c) for c in range(min(w[1] for w in walls), max(w[1] for w in walls) + 1)]
+                    same_row = [(row, c) for c in range(min(w[1] for w in walls), max(w[1] for w in walls) + 1)]
+                    if not any((row, c) in goal_positions for (_, c) in same_row) and all(
+                            pos in walls for pos in wall_row):
+                        return True
+
+                if key in ["L", "R"]:
+                    wall_col = [(r, col + dj) for r in range(min(w[0] for w in walls), max(w[0] for w in walls) + 1)]
+                    same_col = [(r, col) for r in range(min(w[0] for w in walls), max(w[0] for w in walls) + 1)]
+                    if not any((r, col) in goal_positions for (r, _) in same_col) and all(
+                            pos in walls for pos in wall_col):
+                        return True
         return False
+
 
     def get_possible_moves(self,walls,goal_positions):
         moves = []
