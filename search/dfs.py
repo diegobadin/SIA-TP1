@@ -1,6 +1,6 @@
 import time
 
-def solve_with_dfs(initial_state):
+def solve_with_dfs(initial_state,walls,goal_positions):
     start_time = time.time()
 
     stack = [initial_state]
@@ -17,7 +17,7 @@ def solve_with_dfs(initial_state):
 
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state():
+        if current_state.is_goal_state(goal_positions):
             moves = []
             state = current_state
             while came_from[state][0] is not None:
@@ -36,7 +36,7 @@ def solve_with_dfs(initial_state):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves():
+        for action, neighbor in current_state.get_possible_moves(walls,goal_positions):
             if neighbor not in came_from:
                 came_from[neighbor] = (current_state, action)
                 stack.append(neighbor)

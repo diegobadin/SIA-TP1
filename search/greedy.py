@@ -1,8 +1,10 @@
 import heapq
 import itertools
 import time
+from utils.draw import draw_sokoban
 
-def solve_with_greedy(initial_state, heuristic, goal_positions, board):
+
+def solve_with_greedy(initial_state,  walls,goal_positions,heuristic):
     start_time = time.time()
     counter = itertools.count()  # contador global para romper empates
 
@@ -17,10 +19,11 @@ def solve_with_greedy(initial_state, heuristic, goal_positions, board):
 
         if current_state in visited:
             continue
+        # draw_sokoban(walls, current_state.boxes, goal_positions, current_state.player)
         visited.add(current_state)
         expanded_nodes_qty += 1
 
-        if current_state.is_goal_state():
+        if current_state.is_goal_state(goal_positions):
             # Reconstruct solution path
             moves = []
             state = current_state
@@ -50,7 +53,7 @@ def solve_with_greedy(initial_state, heuristic, goal_positions, board):
                 "duration": end_time - start_time
             }
 
-        for action, neighbor in current_state.get_possible_moves():
+        for action, neighbor in current_state.get_possible_moves(walls,goal_positions):
             if neighbor not in came_from:
                 came_from[neighbor] = (current_state, action)
                 h = heuristic(neighbor, goal_positions)
