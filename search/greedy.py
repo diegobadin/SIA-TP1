@@ -1,68 +1,10 @@
-import heapq
-import itertools
-import time
+from search import informed_search
+
+
+def greedy_priority(state, heuristic, g_val):
+    return heuristic(state, state.goal_positions)
+
 
 def solve_with_greedy(initial_state, heuristic, goal_positions, board):
-    start_time = time.time()
-    counter = itertools.count()  # contador global para romper empates
-
-    frontier = []
-    heapq.heappush(frontier, (heuristic(initial_state, goal_positions), next(counter), initial_state))
-    came_from = {initial_state: (None, None)}
-    visited = set()
-    expanded_nodes_qty = 0
-
-    while frontier:
-        h_val, _, current_state = heapq.heappop(frontier)
-
-        if current_state in visited:
-            continue
-        visited.add(current_state)
-        expanded_nodes_qty += 1
-
-        if current_state.is_goal_state():
-            # Reconstruct solution path
-            moves = []
-            state = current_state
-            while came_from[state][0] is not None:
-                parent, action = came_from[state]
-                # Compare player positions to infer the move
-                dr = state.player[0] - parent.player[0]
-                dc = state.player[1] - parent.player[1]
-                if dr == -1 and dc == 0:
-                    moves.append("U")
-                elif dr == 1 and dc == 0:
-                    moves.append("D")
-                elif dr == 0 and dc == -1:
-                    moves.append("L")
-                elif dr == 0 and dc == 1:
-                    moves.append("R")
-                state = parent
-            moves.reverse()
-
-            end_time = time.time()
-            return {
-                "result": "solved",
-                "cost": len(moves),
-                "expanded_nodes_qty": expanded_nodes_qty,
-                "frontier_nodes_qty": len(frontier),
-                "solution": "".join(moves),
-                "duration": end_time - start_time
-            }
-
-        for action, neighbor in current_state.get_possible_moves():
-            if neighbor not in came_from:
-                came_from[neighbor] = (current_state, action)
-                h = heuristic(neighbor, goal_positions)
-                heapq.heappush(frontier, (h, next(counter), neighbor))
-
-    end_time = time.time()
-    return {
-        "result": "no solution",
-        "cost": None,
-        "expanded_nodes_qty": expanded_nodes_qty,
-        "frontier_nodes_qty": len(frontier),
-        "solution": "",
-        "duration": end_time - start_time
-    }
-
+    priority_function = lambda state, goals, g_val: heuristic(state, goals)
+    return informed_search.solve_informed_search(initial_state, priority_function, goal_positions)
