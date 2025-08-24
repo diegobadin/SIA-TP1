@@ -19,8 +19,8 @@ def solve_with_bfs(initial_state,walls,goal_positions):
 
         expanded_nodes_qty += 1
 
-        if len(visited)% 100000 == 0:
-            print(f"Expanded nodes: {len(visited)} and frontier size: {len(frontier)}")
+        # if len(visited)% 100000 == 0:
+        #     print(f"Expanded nodes: {len(visited)} and frontier size: {len(frontier)}")
 
         if current_state.is_goal_state(goal_positions):
             # Reconstruct solution path
