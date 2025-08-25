@@ -54,19 +54,33 @@ if __name__ == "__main__":
 
     board_file_path = sys.argv[1]    # first argument: file path
     algorithm = sys.argv[2]          # second argument: bfs, dfs, etc.
-    if len(sys.argv) > 3:
-        heuristic = sys.argv[3]      # third argument: manhattan, euclidean, linear_conflict, manhattan_player
-    else:
-        heuristic = "manhattan"
+    heuristic = "manhattan"
+    csv_mode = False
 
+    # Parse simple flags/positionals
+    if len(sys.argv) >= 4:
+        arg3 = sys.argv[3]
+        if arg3.startswith("--"):
+            csv_mode = (arg3 == "--csv")
+        else:
+            heuristic = arg3
+            if len(sys.argv) >= 5 and sys.argv[4] == "--csv":
+                csv_mode = True
 
     result = solve(board_file_path, algorithm, get_heuristic_function(heuristic))
 
-    print("=== Sokoban Solver Result ===")
-    print(f"Result: {result['result']}")
-    print(f"Cost: {result['cost']}")
-    print(f"Expanded Nodes: {result['expanded_nodes_qty']}")
-    print(f"Max Frontier Size: {result['frontier_nodes_qty']}")
-    print(f"Solution: {result['solution'] if result['solution'] else 'No solution'}")
-    print(f"Duration: {result['duration']:.4f} seconds")
-    print("==============================")
+    if csv_mode:
+        # CSV row only
+        print(f"{board_file_path},{algorithm},{heuristic},{result['result']},{result['cost']},"
+              f"{result['expanded_nodes_qty']},{result['frontier_nodes_qty']},{result['duration']:.4f}")
+    else:
+        # Pretty print
+        print("=== Sokoban Solver Result ===")
+        print(f"Result: {result['result']}")
+        print(f"Cost: {result['cost']}")
+        print(f"Expanded Nodes: {result['expanded_nodes_qty']}")
+        print(f"Max Frontier Size: {result['frontier_nodes_qty']}")
+        print(f"Solution: {result['solution'] if result['solution'] else 'No solution'}")
+        print(f"Duration: {result['duration']:.4f} seconds")
+        print("==============================")
+
