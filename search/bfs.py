@@ -28,17 +28,7 @@ def solve_with_bfs(initial_state,walls,goal_positions):
             state = current_state
             while came_from[state][0] is not None:
                 parent, action = came_from[state]
-                # Compare player positions to infer the move
-                dr = state.player[0] - parent.player[0]
-                dc = state.player[1] - parent.player[1]
-                if dr == -1 and dc == 0:
-                    moves.append("U")
-                elif dr == 1 and dc == 0:
-                    moves.append("D")
-                elif dr == 0 and dc == -1:
-                    moves.append("L")
-                elif dr == 0 and dc == 1:
-                    moves.append("R")
+                moves.append(action)
                 state = parent
             moves.reverse()
 
