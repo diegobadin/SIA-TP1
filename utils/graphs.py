@@ -16,7 +16,7 @@ import os
     --folder : folder where the CSV result files are located. Default is "results"
     
     Example:
-    python3 plots_results.py --metric duration_sec --folder results
+    python3 utils/graphs.py --metric duration_sec --folder results
 """
 
 # Load all CSV results
