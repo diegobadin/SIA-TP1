@@ -1,4 +1,7 @@
-def manhattan_distance(initial_state, goal_positions):
+from state import directions, l_checks
+
+
+def manhattan_distance(initial_state, goal_positions, walls):
     """
     Computes the Manhattan distance heuristic for a Sokoban state.
 
@@ -19,6 +22,10 @@ def manhattan_distance(initial_state, goal_positions):
     - Each goal position is assigned to only one box (to avoid double-counting).
     """
 
+    for box in initial_state.boxes:
+        if has_deadlocks(initial_state.boxes, box, walls, goal_positions):
+            return float('inf')
+
     total_distance = 0
     remaining_goals = set(goal_positions)
 
@@ -36,7 +43,7 @@ def manhattan_distance(initial_state, goal_positions):
 
     return total_distance
 
-def euclidean_distance(initial_state, goal_positions):
+def euclidean_distance(initial_state, goal_positions, walls):
     """
     Computes the Euclidean distance heuristic for a Sokoban state.
 
@@ -56,6 +63,11 @@ def euclidean_distance(initial_state, goal_positions):
     Notes:
     - Each goal position is assigned to only one box (to avoid double-counting).
     """
+
+    for box in initial_state.boxes:
+        if has_deadlocks(initial_state.boxes, box, walls, goal_positions):
+            return float('inf')
+
     total_distance = 0.0
     remaining_goals = set(goal_positions)
 
@@ -73,7 +85,7 @@ def euclidean_distance(initial_state, goal_positions):
 
     return total_distance
 
-def manhattan_linear_conflicts_distance(initial_state, goal_positions):
+def manhattan_linear_conflicts_distance(initial_state, goal_positions, walls):
     """
     Manhattan distance + Linear Conflicts heuristic for Sokoban.
 
@@ -87,6 +99,11 @@ def manhattan_linear_conflicts_distance(initial_state, goal_positions):
     Returns:
     - heuristic_value: int, Manhattan distance plus 2 times the number of conflicts.
     """
+
+    for box in initial_state.boxes:
+        if has_deadlocks(initial_state.boxes, box, walls, goal_positions):
+            return float('inf')
+
     total_distance, box_to_goal = detail_manhattan_distance(initial_state, goal_positions)
 
     conflicts = 0
@@ -134,7 +151,7 @@ def detail_manhattan_distance(initial_state, goal_positions):
     return total_distance, box_to_goal
 
 
-def manhattan_plus_player_distance(initial_state, goal_positions):
+def manhattan_plus_player_distance(initial_state, goal_positions, walls):
     """
        Computes a non-admissible heuristic for a Sokoban state.
 
@@ -158,9 +175,63 @@ def manhattan_plus_player_distance(initial_state, goal_positions):
          and therefore is non-admissible.
        """
     # Use the already implemented Manhattan distance for boxes to goals
-    total_distance = manhattan_distance(initial_state, goal_positions)
+    total_distance = manhattan_distance(initial_state, goal_positions, walls)
 
     # Distance from player to all boxes
     total_distance += sum(abs(initial_state.player[0] - box[0]) + abs(initial_state.player[1] - box[1]) for box in initial_state.boxes)
 
     return total_distance
+
+
+
+
+def has_deadlocks(new_boxes, new_box_pos, walls, goal_positions):
+
+    if new_box_pos in goal_positions:
+        return False
+
+    row, col = new_box_pos
+
+    corner_checks = [
+        (directions['U'], directions['R']),
+        (directions['R'], directions['D']),
+        (directions['D'], directions['L']),
+        (directions['L'], directions['U'])
+    ]
+
+    # corner check
+    for d1, d2 in corner_checks:
+        r1, c1 = row + d1[0], col + d1[1]
+        r2, c2 = row + d2[0], col + d2[1]
+        if (r1, c1) in walls and (r2, c2) in walls:
+            return True
+
+    # box next to box with walls
+    for key, (di, dj) in directions.items():
+        neighbor = (row + di, col + dj)
+        if neighbor in new_boxes:
+            for offset1, offset2 in l_checks[key]:
+                r1, c1 = row + offset1[0], col + offset1[1]
+                r2, c2 = row + offset2[0], col + offset2[1]
+                if (r1, c1) in walls and (r2, c2) in walls:
+                    return True
+
+    # wall along row or column with no goals
+    for key, (di, dj) in directions.items():
+        neighbor = (row + di, col + dj)
+
+        if neighbor in walls:
+            if key in ["U", "D"]:
+                wall_row = [(row + di, c) for c in range(min(w[1] for w in walls), max(w[1] for w in walls) + 1)]
+                same_row = [(row, c) for c in range(min(w[1] for w in walls), max(w[1] for w in walls) + 1)]
+                if not any((row, c) in goal_positions for (_, c) in same_row) and all(
+                        pos in walls for pos in wall_row):
+                    return True
+
+            if key in ["L", "R"]:
+                wall_col = [(r, col + dj) for r in range(min(w[0] for w in walls), max(w[0] for w in walls) + 1)]
+                same_col = [(r, col) for r in range(min(w[0] for w in walls), max(w[0] for w in walls) + 1)]
+                if not any((r, col) in goal_positions for (r, _) in same_col) and all(
+                        pos in walls for pos in wall_col):
+                    return True
+    return False

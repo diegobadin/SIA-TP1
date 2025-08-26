@@ -7,7 +7,7 @@ def solve_informed_search(initial_state, priority_function, goal_positions, boar
     counter = itertools.count()  # contador global para romper empates
 
     frontier = []
-    heapq.heappush(frontier, (priority_function(initial_state, goal_positions, 0), next(counter), initial_state, 0))
+    heapq.heappush(frontier, (priority_function(initial_state, goal_positions, 0, board), next(counter), initial_state, 0))
     came_from = {initial_state: (None, None)}
     visited = set()
     expanded_nodes_qty = 0
@@ -54,7 +54,7 @@ def solve_informed_search(initial_state, priority_function, goal_positions, boar
             if neighbor not in came_from:
                 came_from[neighbor] = (current_state, action)
                 g_neighbor = g_val + 1  # costo acumulado
-                h = priority_function(neighbor, goal_positions, g_neighbor)
+                h = priority_function(neighbor, goal_positions, g_neighbor, board)
                 heapq.heappush(frontier, (h, next(counter), neighbor, g_neighbor))
 
     end_time = time.time()
