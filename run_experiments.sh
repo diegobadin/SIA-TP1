@@ -22,7 +22,7 @@ for board in "$@"; do
     csv_file="$RESULTS_DIR/${board_name}_results.csv"
 
     echo "▶️ Ejecutando algoritmos para board: $board_name"
-    echo "board,algorithm,heuristic,result,cost,expanded,frontier,duration_sec" > $csv_file
+    echo "board,algorithm,heuristic,result,cost,expanded,frontier,duration_sec,solution" > $csv_file
 
     # Without heuristic algorithms
     for alg in "${ALGORITHMS_NO_HEURISTICS[@]}"; do

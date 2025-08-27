@@ -21,26 +21,30 @@ if len(sys.argv) < 2:
 for board_path in sys.argv[1:]:
     board = Path(board_path)
     board_name = board.stem
-    csv_file = RESULTS_DIR / f"{board_name}_results.csv"
 
     print(f"▶️ Ejecutando algoritmos para board: {board_name}")
 
-    with csv_file.open("w") as f:
-        f.write("board,algorithm,heuristic,result,cost,expanded,frontier,duration_sec\n")
+    for version in range(5):  # v0 a v4
+        csv_file = RESULTS_DIR / f"{board_name}_v{version}_results.csv"
 
-    for alg in ALGORITHMS_NO_HEURISTICS:
-        subprocess.run(
-            [sys.executable, "main.py", str(board), alg, "--csv"],
-            stdout=open(csv_file, "a"),
-            check=True
-        )
+        with csv_file.open("w") as f:
+            f.write("board,algorithm,heuristic,result,cost,expanded,frontier,duration_sec,solution\n")
 
-    for alg in ALGORITHMS_HEURISTICS:
-        for heur in HEURISTICS:
+        # Algoritmos sin heurística
+        for alg in ALGORITHMS_NO_HEURISTICS:
             subprocess.run(
-                [sys.executable, "main.py", str(board), alg, heur, "--csv"],
+                [sys.executable, "main.py", str(board), alg, "--csv"],
                 stdout=open(csv_file, "a"),
                 check=True
             )
 
-    print(f"✅ Resultados guardados en {csv_file}")
+        # Algoritmos con heurística
+        for alg in ALGORITHMS_HEURISTICS:
+            for heur in HEURISTICS:
+                subprocess.run(
+                    [sys.executable, "main.py", str(board), alg, heur, "--csv"],
+                    stdout=open(csv_file, "a"),
+                    check=True
+                )
+
+        print(f"✅ Resultados v{version} guardados en {csv_file}")
