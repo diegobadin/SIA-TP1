@@ -127,22 +127,3 @@ if __name__ == "__main__":
 
     df = load_results(args.folder)
     plot_all_metrics(df)
-
-    '''
-
-    - algoritmo + heuristica en un tablero
-
-
-    - [listo] barras algoritmo + heuristica conjunto de todos los tableros tiempo de ejecución - graficar promedio de datos de todos los archivos en boards/ error
-    - [listo] barras algoritmo + heuristica conjnto de todos lso tableros costo
-    - [listo] barras algoritmo + heuristica conjnto de todos lso tableros nodos en frontera
-    - [listo] barras algoritmo + heuristica conjnto de todos lso tableros nodos expandidos 
-
-    - scatter plot algoritmo + hueristica costos vs tiempo  -> podemos usar un único board para esto
-    - scatter plot algoritmo + heuristica nodos expandidos vs tiempo -> podemos usar un único board para esto
-
-    - [maybe] comparación con tableros - distribución de mapas en estadísticas
-
-
-
-    '''
