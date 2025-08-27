@@ -2,18 +2,22 @@ import heapq
 import itertools
 import time
 
-def solve_informed_search(initial_state, priority_function, goal_positions, board):
+def solve_informed_search(initial_state, priority_function, goal_positions, board, tiebreaker_function):
     start_time = time.time()
     counter = itertools.count()  # contador global para romper empates
 
     frontier = []
-    heapq.heappush(frontier, (priority_function(initial_state, goal_positions, 0, board), next(counter), initial_state, 0))
+    tie_breaker = 0
+    if tiebreaker_function:
+        tie_breaker = tiebreaker_function(initial_state, goal_positions, board)
+
+    heapq.heappush(frontier, (priority_function(initial_state, goal_positions, 0, board), tie_breaker,next(counter), initial_state, 0))
     came_from = {initial_state: (None, None)}
     visited = set()
     expanded_nodes_qty = 0
 
     while frontier:
-        h_val, _, current_state, g_val = heapq.heappop(frontier)
+        h_val, tie_breaker, _, current_state, g_val = heapq.heappop(frontier)
 
         if current_state in visited:
             continue
@@ -55,7 +59,10 @@ def solve_informed_search(initial_state, priority_function, goal_positions, boar
                 came_from[neighbor] = (current_state, action)
                 g_neighbor = g_val + 1  # costo acumulado
                 h = priority_function(neighbor, goal_positions, g_neighbor, board)
-                heapq.heappush(frontier, (h, next(counter), neighbor, g_neighbor))
+                tie_breaker = 0
+                if tiebreaker_function:
+                    tie_breaker = tiebreaker_function(neighbor, goal_positions, board)
+                heapq.heappush(frontier, (h, tie_breaker, next(counter), neighbor, g_neighbor))
 
     end_time = time.time()
     return {
