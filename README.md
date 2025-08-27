@@ -12,10 +12,18 @@ El sistema permite variar los métodos de búsqueda empleados y las heurísticas
 
 Para construir el proyecto por completo y contar con el entorno necesario, ejecute de manera secuencial los siguientes comandos desde la raiz:
 
+### Windows:
+
     python -m venv venv
 
     .\venv\Scripts\activate
 
+    pip install -r requirements.txt
+
+### Linux/MacOS
+
+    python3 -m venv venv
+    source venv/bin/activate
     pip install -r requirements.txt
     
 
@@ -38,8 +46,14 @@ Donde `<algorithm>` puede ser una de las siguientes opciones:
 
 Para correr un programa que ejecute la combinación de todos los algoritmos y heurísticas en los tableros, ejecute desde la raíz:
 
+###Windows:
+
     python run_experiments.py boards/b1.txt
 
+###Linux/MacOS:
+
+    python3 run_experiments.py boards/b1.txt
+    
 También es posible pasar más de un tablero como argumento, por ejemplo:
 
     python run_experiments.py boards/b2.txt boards/b7.txt boards/b1.txt
@@ -73,4 +87,5 @@ Por ejemplo, el archivo `b1_results.csv` contendrá un header con las siguientes
 | VALENTINA MARTI, RETA | 63225 |
 | MARIANO IVAN, ODZOMEK | 63386
 | JULIETA, TECHENSKI | 62547 |
+
 
