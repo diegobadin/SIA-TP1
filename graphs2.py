@@ -22,6 +22,7 @@ def plot_all_metrics(df):
         std_time=("duration_sec", "std"),
     ).reset_index()
 
+
     # Orden deseado
     algo_order = ["bfs", "dfs", "iddfs", "astar", "greedy"]
 
@@ -42,8 +43,10 @@ def plot_all_metrics(df):
             label=heuristic
         )
         plt.bar_label(bars, fmt="%.1f", label_type="center", fontsize=8, color="white")
-    plt.xticks([label_algo(a,h) for a in algo_order for h in grouped["heuristic"].unique()],
-               rotation=45, ha="right")
+    plt.xticks(
+        [label_algo(a, h) for a, h in zip(grouped["algorithm"], grouped["heuristic"])],
+        rotation=45, ha="right"
+    )
     plt.title("Costo promedio por Algoritmo + Heurística")
     plt.ylabel("Costo (media ± std)")
     plt.tight_layout()
@@ -65,8 +68,10 @@ def plot_all_metrics(df):
         )
         plt.bar_label(bars, fmt="%.1f", label_type="center", fontsize=8, color="white")
     plt.yscale("log")
-    plt.xticks([label_algo(a,h) for a in algo_order for h in grouped["heuristic"].unique()],
-               rotation=45, ha="right")
+    plt.xticks(
+        [label_algo(a, h) for a, h in zip(grouped["algorithm"], grouped["heuristic"])],
+        rotation=45, ha="right"
+    )
     plt.title("Nodos expandidos promedio")
     plt.ylabel("Expandidos (log, media ± std)")
     plt.tight_layout()
@@ -88,8 +93,10 @@ def plot_all_metrics(df):
         )
         plt.bar_label(bars, fmt="%.1f", label_type="center", fontsize=8, color="white")
     plt.yscale("log")
-    plt.xticks([label_algo(a,h) for a in algo_order for h in grouped["heuristic"].unique()],
-               rotation=45, ha="right")
+    plt.xticks(
+        [label_algo(a, h) for a, h in zip(grouped["algorithm"], grouped["heuristic"])],
+        rotation=45, ha="right"
+    )
     plt.title("Tamaño de frontera promedio")
     plt.ylabel("Frontera (log, media ± std)")
     plt.tight_layout()
@@ -110,8 +117,10 @@ def plot_all_metrics(df):
             label=heuristic
         )
         plt.bar_label(bars, fmt="%.1f", label_type="edge", fontsize=8, color="black")
-    plt.xticks([label_algo(a,h) for a in algo_order for h in grouped["heuristic"].unique()],
-               rotation=45, ha="right")
+    plt.xticks(
+        [label_algo(a, h) for a, h in zip(grouped["algorithm"], grouped["heuristic"])],
+        rotation=45, ha="right"
+    )
     plt.title("Tiempo de ejecución promedio")
     plt.ylabel("Segundos (media ± std)")
     plt.tight_layout()
