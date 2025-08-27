@@ -42,7 +42,7 @@ def get_heuristic_function(name: str):
         "manhattan_player":heuristics.manhattan_linear_conflicts_distance,
     }
 
-    if not name:
+    if name == "no_heuristic":
         return None
 
     if name not in heuristics_map:
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 csv_mode = True
 
     if algorithm.lower() in ["bfs", "dfs", "iddfs"]:
-        heuristic = ""
+        heuristic = "no_heuristic"
     result = solve(board_file_path, algorithm, get_heuristic_function(heuristic))
 
     if csv_mode:
