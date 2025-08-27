@@ -5,7 +5,7 @@ def solve_with_iddfs(initial_state, walls, goals_positions , depth_step=10):
     expanded_nodes_qty = 0
 
     # AUX: Depth-Limited Search (DLS)
-    def dls(state, depth, came_from, visited):
+    def dls(state, depth, came_from, visited, frontier_nodes):
         nonlocal expanded_nodes_qty
         if state in visited:
             return False, None
@@ -14,12 +14,13 @@ def solve_with_iddfs(initial_state, walls, goals_positions , depth_step=10):
         if state.is_goal_state(goals_positions):
             return True, state
         if depth == 0:
+            frontier_nodes.add(state)
             return True, None
         any_frontier = False
         for action, neighbor in state.get_possible_moves(walls, goals_positions):
             if neighbor not in came_from:
                 came_from[neighbor] = (state, action)
-                reached_frontier, result = dls(neighbor, depth - 1, came_from, visited)
+                reached_frontier, result = dls(neighbor, depth - 1, came_from, visited, frontier_nodes)
                 if result is not None:
                     return True, result
                 if reached_frontier:
@@ -30,8 +31,9 @@ def solve_with_iddfs(initial_state, walls, goals_positions , depth_step=10):
     while True:
         came_from = {initial_state: (None, None)}
         visited = set()
-        reached_frontier, result_state = dls(initial_state, depth_limit, came_from, visited)
-        frontier_nodes_qty = len([s for s in came_from if s not in visited])
+        frontier_nodes = set()
+        reached_frontier, result_state = dls(initial_state, depth_limit, came_from, visited, frontier_nodes)
+        frontier_nodes_qty = len(frontier_nodes)
         if result_state is not None:
             moves = []
             state = result_state
