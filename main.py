@@ -39,8 +39,11 @@ def get_heuristic_function(name: str):
         "manhattan": heuristics.manhattan_distance,
         "euclidean": heuristics.euclidean_distance,
         "linear_conflict": heuristics.manhattan_linear_conflicts_distance,
-        "manhattan_player":heuristics.manhattan_linear_conflicts_distance
+        "manhattan_player":heuristics.manhattan_linear_conflicts_distance,
     }
+
+    if not name:
+        return None
 
     if name not in heuristics_map:
         raise ValueError(f"Heuristic '{name}' not recognized. Options: {list(heuristics_map.keys())}")
@@ -67,6 +70,8 @@ if __name__ == "__main__":
             if len(sys.argv) >= 5 and sys.argv[4] == "--csv":
                 csv_mode = True
 
+    if algorithm.lower() in ["bfs", "dfs", "iddfs"]:
+        heuristic = ""
     result = solve(board_file_path, algorithm, get_heuristic_function(heuristic))
 
     if csv_mode:
