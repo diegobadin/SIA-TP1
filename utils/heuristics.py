@@ -1,4 +1,5 @@
 from state import directions, l_checks
+import math
 
 
 def manhattan_distance(initial_state, goal_positions, walls):
@@ -75,7 +76,7 @@ def euclidean_distance(initial_state, goal_positions, walls):
         min_dist = float('inf')
         closest_goal = None
         for goal in remaining_goals:
-            dist = (box[0] - goal[0]) ** 2 + (box[1] - goal[1]) ** 2
+            dist = math.sqrt((box[0] - goal[0]) ** 2 + (box[1] - goal[1]) ** 2)
             if dist < min_dist:
                 min_dist = dist
                 closest_goal = goal
