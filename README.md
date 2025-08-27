@@ -30,8 +30,13 @@ Para construir el proyecto por completo y contar con el entorno necesario, ejecu
 ## Ejecución
 
 Para correr un programa, ejecute:
+### Windows:
 
     python main.py <board_file_path> <algorithm>
+
+### Linux/MacOS:
+
+    python3 main.py <board_file_path> <algorithm>
 
 Donde `<algorithm>` puede ser una de las siguientes opciones:
 
@@ -46,11 +51,11 @@ Donde `<algorithm>` puede ser una de las siguientes opciones:
 
 Para correr un programa que ejecute la combinación de todos los algoritmos y heurísticas en los tableros, ejecute desde la raíz:
 
-###Windows:
+### Windows:
 
     python run_experiments.py boards/b1.txt
 
-###Linux/MacOS:
+### Linux/MacOS:
 
     python3 run_experiments.py boards/b1.txt
     
@@ -87,5 +92,6 @@ Por ejemplo, el archivo `b1_results.csv` contendrá un header con las siguientes
 | VALENTINA MARTI, RETA | 63225 |
 | MARIANO IVAN, ODZOMEK | 63386
 | JULIETA, TECHENSKI | 62547 |
+
 
 
