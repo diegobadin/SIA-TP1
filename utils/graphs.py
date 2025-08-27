@@ -46,7 +46,7 @@ def plot_metrics(df, metric="duration_sec"):
         bars_labels = []
         bars_values = []
 
-        for idx, row in subset.iterrows():
+        for _, row in subset.iterrows():
             if row["algorithm"].lower() in ["greedy", "astar"]:
                 label = f"{row['algorithm']} ({row['heuristic']})"
             else:
@@ -55,17 +55,24 @@ def plot_metrics(df, metric="duration_sec"):
             bars_labels.append(label)
             bars_values.append(row[metric])
 
-        plt.bar(bars_labels, bars_values, color=plt.cm.tab20.colors[:len(bars_labels)])
+        bars = plt.bar(bars_labels, bars_values, color=plt.cm.tab20.colors[:len(bars_labels)])
         plt.title(f"Board {board} - Métrica: {metric}")
         plt.ylabel(metric.capitalize())
         plt.xlabel("Algoritmo")
         plt.xticks(rotation=45, ha="right")
 
-        unique_values = sorted(subset[metric].unique())
-        plt.yticks(unique_values)
+        # === Mostrar valores arriba de cada barra ===
+        for bar, value in zip(bars, bars_values):
+            if metric == "duration_sec":
+                plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(),
+                         f"{value:.2f}", ha="center", va="bottom", fontsize=9)
+            else:
+                plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(),
+                         f"{int(value)}", ha="center", va="bottom", fontsize=9)
 
         plt.tight_layout()
         plt.show()
+
 
 # -----------------------------
 # Function 2: only Greedy y A*
@@ -86,19 +93,25 @@ def plot_greedy_astar(df, metric="duration_sec"):
         bars_labels = []
         bars_values = []
 
-        for idx, row in subset.iterrows():
+        for _, row in subset.iterrows():
             label = f"{row['algorithm']} ({row['heuristic']})"
             bars_labels.append(label)
             bars_values.append(row[metric])
 
-        plt.bar(bars_labels, bars_values, color=plt.cm.tab20.colors[:len(bars_labels)])
+        bars = plt.bar(bars_labels, bars_values, color=plt.cm.tab20.colors[:len(bars_labels)])
         plt.title(f"Board {board} - Solo Greedy y A* ({metric})")
         plt.ylabel(metric.capitalize())
         plt.xlabel("Algoritmo + Heurística")
         plt.xticks(rotation=45, ha="right")
 
-        unique_values = sorted(subset[metric].unique())
-        plt.yticks(unique_values)
+        # === Mostrar valores arriba de cada barra ===
+        for bar, value in zip(bars, bars_values):
+            if metric == "duration_sec":
+                plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(),
+                         f"{value:.2f}", ha="center", va="bottom", fontsize=9)
+            else:
+                plt.text(bar.get_x() + bar.get_width()/2, bar.get_height(),
+                         f"{int(value)}", ha="center", va="bottom", fontsize=9)
 
         plt.tight_layout()
         plt.show()
