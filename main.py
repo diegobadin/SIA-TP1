@@ -77,7 +77,7 @@ if __name__ == "__main__":
     if csv_mode:
         # CSV row only
         print(f"{board_file_path},{algorithm},{heuristic},{result['result']},{result['cost']},"
-              f"{result['expanded_nodes_qty']},{result['frontier_nodes_qty']},{result['duration']:.4f}")
+              f"{result['expanded_nodes_qty']},{result['frontier_nodes_qty']},{result['duration']:.4f},{result['solution']}")
     else:
         # Pretty print
         print("=== Sokoban Solver Result ===")
